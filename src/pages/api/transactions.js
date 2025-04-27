@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
         case 'POST':
             try {
-                const { amount, date, description } = req.body;
+                const { amount, date, description, category } = req.body;
                 if (!amount || !date || !description) {
                     return res.status(400).json({ error: 'Missing required fields' });
                 }
@@ -30,7 +30,8 @@ export default async function handler(req, res) {
                 const result = await db.collection('transactions').insertOne({
                     amount: parseFloat(amount),
                     date,
-                    description
+                    description,
+                    category: category || 'Other'
                 });
 
                 const newTransaction = await db.collection('transactions').findOne({ _id: result.insertedId });
@@ -43,7 +44,7 @@ export default async function handler(req, res) {
 
         case 'PUT':
             try {
-                const { id, amount, date, description } = req.body;
+                const { id, amount, date, description, category } = req.body;
                 if (!id || !amount || !date || !description) {
                     return res.status(400).json({ error: 'Missing required fields' });
                 }
@@ -53,7 +54,12 @@ export default async function handler(req, res) {
 
                 const result = await db.collection('transactions').updateOne(
                     { _id: new ObjectId(id) },
-                    { $set: { amount: parseFloat(amount), date, description } }
+                    { $set: { 
+                        amount: parseFloat(amount), 
+                        date, 
+                        description,
+                        category: category || 'Other'
+                    }}
                 );
 
                 if (result.matchedCount === 0) {

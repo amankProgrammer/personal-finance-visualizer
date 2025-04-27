@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
 import MonthlyChart from '../components/MonthlyChart';
+import Dashboard from '../components/Dashboard';
+import CategoryPieChart from '../components/CategoryPieChart'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from 'date-fns';
 
 export default function Home() {
   const [transactions, setTransactions] = useState([]);
   const [transactionToEdit, setTransactionToEdit] = useState(null);
   const [monthlyData, setMonthlyData] = useState([]);
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
     fetchTransactions();
@@ -40,7 +44,10 @@ export default function Home() {
         monthlyTotals[monthYear] = 0;
       }
       
-      monthlyTotals[monthYear] += parseFloat(transaction.amount);
+      // Only count expenses, not income
+      if (transaction.category !== 'Income') {
+        monthlyTotals[monthYear] += parseFloat(transaction.amount);
+      }
     });
 
     const chartData = Object.keys(monthlyTotals).map(month => ({
@@ -91,6 +98,7 @@ export default function Home() {
 
   const handleEditTransaction = (transaction) => {
     setTransactionToEdit(transaction);
+    setActiveTab("transactions");
   };
 
   const handleDeleteTransaction = async (id) => {
@@ -111,22 +119,59 @@ export default function Home() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6 text-center">Personal Finance Visualizer</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <TransactionForm 
-            transactionToEdit={transactionToEdit} 
-            onSave={handleSaveTransaction} 
-          />
-          <TransactionList 
-            transactions={transactions} 
-            onEdit={handleEditTransaction} 
-            onDelete={handleDeleteTransaction} 
-          />
-        </div>
-        <div>
-          <MonthlyChart data={monthlyData} />
-        </div>
-      </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="transactions">Transactions</TabsTrigger>
+          <TabsTrigger value="charts">Charts</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="dashboard" className="mt-6">
+          <Dashboard transactions={transactions} />
+        </TabsContent>
+        
+        <TabsContent value="transactions" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-1">
+              <TransactionForm 
+                transactionToEdit={transactionToEdit} 
+                onSave={handleSaveTransaction} 
+              />
+            </div>
+            <div className="md:col-span-2">
+              <TransactionList 
+                transactions={transactions} 
+                onEdit={handleEditTransaction} 
+                onDelete={handleDeleteTransaction} 
+              />
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="charts" className="mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <MonthlyChart data={monthlyData} />
+            <div className="h-[300px]">
+              {/* We'll reuse the CategoryPieChart component here */}
+              <CategoryPieChart 
+                data={transactions
+                  .filter(tx => tx.category !== 'Income')
+                  .reduce((acc, tx) => {
+                    const category = tx.category || 'Other';
+                    const existingCategory = acc.find(item => item.name === category);
+                    if (existingCategory) {
+                      existingCategory.value += parseFloat(tx.amount);
+                    } else {
+                      acc.push({ name: category, value: parseFloat(tx.amount) });
+                    }
+                    return acc;
+                  }, [])
+                }
+              />
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

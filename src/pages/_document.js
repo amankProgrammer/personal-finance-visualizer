@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>Personal Finance Visualizer</title>
         <meta name="description" content="Track and visualize your personal finances" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
