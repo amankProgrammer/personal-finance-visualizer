@@ -14,7 +14,7 @@ const MonthlyChart = ({ data = [] }) => {
 							<CartesianGrid strokeDasharray="3 3" />
 							<XAxis dataKey="name" />
 							<YAxis />
-							<Tooltip formatter={(value) => [`$${value}`, 'Amount']} />
+							<Tooltip formatter={(value) => [`₹${value}`, 'Amount']} />
 							<Legend />
 							<Bar dataKey="total" fill="#8884d8" name="Total Expenses" />
 						</BarChart>
