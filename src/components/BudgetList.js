@@ -50,7 +50,7 @@ const BudgetList = ({ budgets, expenses, onDelete }) => {
                 </div>
                 
                 <div className="flex justify-between text-sm">
-                  <span>${spent.toFixed(2)} of ${budget.amount.toFixed(2)}</span>
+                  <span>₹{spent.toFixed(2)} of ₹{budget.amount.toFixed(2)}</span>
                   <span>{progress.toFixed(0)}%</span>
                 </div>
               </div>

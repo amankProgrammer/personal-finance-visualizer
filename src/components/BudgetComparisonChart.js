@@ -31,7 +31,7 @@ const BudgetComparisonChart = ({ budgets, expenses }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value) => [`$${value.toFixed(2)}`, '']} />
+              <Tooltip formatter={(value) => [`₹${value.toFixed(2)}`, '']} />
               <Legend />
               <Bar dataKey="Budget" fill="#8884d8" />
               <Bar dataKey="Spent" fill="#82ca9d" />
