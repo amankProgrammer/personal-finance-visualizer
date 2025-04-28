@@ -22,6 +22,13 @@ A web application for tracking and visualizing personal finances built with Next
 - Recent transactions view on the dashboard
 - Tabbed interface for easy navigation between dashboard, transactions, and charts
 
+### Stage 3: Budgeting
+- Set monthly category budgets
+- Visual progress bars showing budget utilization
+- Budget vs actual comparison chart
+- Simple budget management interface
+- Track spending against budget limits
+
 ## Tech Stack
 
 - **Frontend**: Next.js, React, Tailwind CSS, shadcn/ui components, Recharts
@@ -64,6 +71,8 @@ Add transactions using the form on the left side
 View your transaction history in the list below the form
 Edit or delete transactions as needed
 View monthly spending patterns in the chart on the right side
+Set and manage budgets for different spending categories
+Track your spending against budget limits with visual indicators
 
 ## Project Structure
 /src/components - React components
@@ -77,6 +86,10 @@ POST /api/transactions - Create a new transaction
 PUT /api/transactions - Update an existing transaction
 DELETE /api/transactions?id=<id> - Delete a transaction
 GET /api/monthly-expenses - Get monthly expense data for charts
+POST /api/budgets - Create or update a budget
+DELETE /api/budgets?id=
+- Delete a budget
+GET /api/category-expenses - Get expenses grouped by month and category
 
 
 ## Acknowledgments

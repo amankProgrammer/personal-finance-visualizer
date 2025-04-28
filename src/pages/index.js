@@ -6,6 +6,8 @@ import Dashboard from '../components/Dashboard';
 import CategoryPieChart from '../components/CategoryPieChart'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from 'date-fns';
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [transactions, setTransactions] = useState([]);
@@ -118,6 +120,12 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6 text-center">Personal Finance Visualizer</h1>
+      
+      <div className="flex justify-center mb-6">
+        <Link href="/budget" passHref>
+          <Button>Budget Management</Button>
+        </Link>
+      </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
